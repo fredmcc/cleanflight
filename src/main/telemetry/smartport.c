@@ -113,7 +113,9 @@ enum
     FSSP_DATAID_T2         = 0x0410 ,
     FSSP_DATAID_GPS_ALT    = 0x0820 ,
     FSSP_DATAID_A3         = 0x0900 ,
-    FSSP_DATAID_A4         = 0x0910
+    FSSP_DATAID_A4         = 0x0910 ,
+    FSSP_DATAID_DIY_FM     = 0x5000 ,
+    FSSP_DATAID_DIY_STATE  = 0x5001
 };
 
 const uint16_t frSkyDataIdTable[] = {
@@ -139,6 +141,8 @@ const uint16_t frSkyDataIdTable[] = {
     FSSP_DATAID_T2        ,
     FSSP_DATAID_GPS_ALT   ,
     FSSP_DATAID_A4        ,
+    FSSP_DATAID_DIY_FM    ,
+    FSSP_DATAID_DIY_STATE ,
     0
 };
 
@@ -797,6 +801,63 @@ void handleSmartPortTelemetry(void)
                     smartPortSendPackage(id, getVbat() * 10 / batteryCellCount ); // given in 0.1V, convert to volts
                     smartPortHasRequest = 0;
                 }
+                break;
+            case FSSP_DATAID_DIY_FM     :
+
+				tmpi=0;
+                if (FLIGHT_MODE(ANGLE_MODE))
+                    tmpi |= (1 << 0);
+                if (FLIGHT_MODE(HORIZON_MODE))
+                    tmpi |= (1 << 1);
+                if (FLIGHT_MODE(MAG_MODE))
+                    tmpi |= (1 << 2);
+                if (FLIGHT_MODE(BARO_MODE))
+                    tmpi |= (1 << 3);
+                if (FLIGHT_MODE(GPS_HOME_MODE))
+                    tmpi |= (1 << 4);
+                if (FLIGHT_MODE(GPS_HOLD_MODE))
+                    tmpi |= (1 << 5);
+                if (FLIGHT_MODE(HEADFREE_MODE))
+                    tmpi |= (1 << 6);
+                if (FLIGHT_MODE(UNUSED_MODE))
+                    tmpi |= (1 << 7);
+                if (FLIGHT_MODE(PASSTHRU_MODE))
+                    tmpi |= (1 << 8);
+                if (FLIGHT_MODE(SONAR_MODE))
+                    tmpi |= (1 << 9);
+                if (FLIGHT_MODE(FAILSAFE_MODE))
+                    tmpi |= (1 << 10);
+
+
+                smartPortSendPackage(id, tmpi); 
+                smartPortHasRequest = 0;
+                break;
+            case FSSP_DATAID_DIY_STATE  :
+
+				tmpi = 0;
+                if (ARMING_FLAG(OK_TO_ARM))
+                    tmpi |= (1 << 0);
+                if (ARMING_FLAG(PREVENT_ARMING))
+                    tmpi |= (1 << 1);
+                if (ARMING_FLAG(ARMED))
+                    tmpi |= (1 << 2);
+                if (ARMING_FLAG(WAS_EVER_ARMED))
+                    tmpi |= (1 << 3);
+
+                if (STATE(GPS_FIX_HOME))
+                    tmpi |= (1 << 15);
+                if (STATE(GPS_FIX))
+                    tmpi |= (1 << 16);
+                if (STATE(CALIBRATE_MAG))
+                    tmpi |= (1 << 17);
+                if (STATE(SMALL_ANGLE))
+                    tmpi |= (1 << 18);
+                if (STATE(FIXED_WING))
+                    tmpi |= (1 << 19);
+
+
+                smartPortSendPackage(id, tmpi );
+                smartPortHasRequest = 0;
                 break;
             default:
                 break;
