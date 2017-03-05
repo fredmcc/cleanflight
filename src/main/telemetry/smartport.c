@@ -93,9 +93,10 @@ enum
 enum
 {
     FSSP_DATAID_SPEED      = 0x0830 ,
+    FSSP_DATAID_AIR_SPEED  = 0x0a00 ,
     FSSP_DATAID_VFAS       = 0x0210 ,
     FSSP_DATAID_CURRENT    = 0x0200 ,
-    FSSP_DATAID_RPM        = 0x050F ,
+    FSSP_DATAID_RPM        = 0x0500 ,
     FSSP_DATAID_ALTITUDE   = 0x0100 ,
     FSSP_DATAID_FUEL       = 0x0600 ,
     FSSP_DATAID_ADC1       = 0xF102 ,
@@ -112,6 +113,7 @@ enum
     FSSP_DATAID_T1         = 0x0400 ,
     FSSP_DATAID_T2         = 0x0410 ,
     FSSP_DATAID_GPS_ALT    = 0x0820 ,
+    FSSP_DATAID_GPS_COURS  = 0x0840 ,
     FSSP_DATAID_A3         = 0x0900 ,
     FSSP_DATAID_A4         = 0x0910 ,
     FSSP_DATAID_DIY_FM     = 0x5000 ,
